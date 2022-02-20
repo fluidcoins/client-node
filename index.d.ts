@@ -314,7 +314,7 @@ declare class  FluidCoins {
     * @param per_page Number of results per page. Defaults to 20
     * @param status filter results by the status of the links Can either be success, failed or pending
     */
-   getAllTransactions(page: number, per_page: number, status: Status): Promise<>
+   getAllTransactions(page: number, per_page: number, status: Status): Promise<any | undefined>
 
    /**
     * Fetches a single transaction
