@@ -6,6 +6,8 @@ export type Country = 'NG'
 
 export type Currency = 'USD' | 'NGN';
 
+export type CryptoCodes = 'BTC' | 'USDT' | 'USDC' | 'ETH' | 'MATIC' | 'LTC'| 'DODGE' | 'XRP'
+| 'XLM' | 'TRON' | 'BUSD' | 'BCH' | 'BNB'
 export interface Bank {
   account_number: string;
   bank_code: string;
@@ -52,7 +54,7 @@ declare class  FluidCoins {
    * @param code Code for the coin you want to generate an address for. e.g (XLM, USDC)
    * @param network erc20,trc20,bep20 and others
    */
-  createNewAddress(code: string, network: string): Promise<any | undefined>
+  createNewAddress(code: CryptoCodes, network: string): Promise<any | undefined>
 
   /**
    * Fetches an address by its id
