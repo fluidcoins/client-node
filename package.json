@@ -7,12 +7,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faithfulojebiyi/fluidcoins-node.git"
+  },
   "keywords": [
     "FluidCoins",
     "Crypto",
     "NodeJS"
   ],
-  "author": "Faithful Ojebiyi",
+  "author": {
+    "name": "Faithful Ojebiyi",
+    "email": "faithfulOjebiyi@gmail.com"
+  },
   "license": "MIT",
   "dependencies": {
     "axios": "^0.25.0"
