@@ -1,3 +1,2 @@
-const Fluidcoins = require('./lib/Fluidcoins')
 
-module.exports = Fluidcoins
+module.exports = require('./lib/Fluidcoins')
