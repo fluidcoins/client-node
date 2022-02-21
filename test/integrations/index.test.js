@@ -8,10 +8,14 @@ describe('Fluidcoins', () => {
 
   describe('#Address', () => {
     it('Should Fetch addresses', async () => {
-      const data = await fluidcoins.getAddresses()
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
-      expect(data.addresses).to.be.an('array')
+      try {
+        const data = await fluidcoins.getAddresses()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.addresses).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
 
     it('Should new address with error message', async () => {
@@ -24,44 +28,68 @@ describe('Fluidcoins', () => {
     })
 
     it('Should create a new ETH address', async () => {
-      const data = await fluidcoins.createNewAddress({ code: 'ETH', network: 'ERC20' })
-      address = data.address
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
+      try {
+        const data = await fluidcoins.createNewAddress({ code: 'ETH', network: 'ERC20' })
+        address = data.address
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
 
     it('Should create a new XRP address', async () => {
-      const data = await fluidcoins.createNewAddress({ code: 'XRP', network: 'XRP' })
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
+      try {
+        const data = await fluidcoins.createNewAddress({ code: 'XRP', network: 'XRP' })
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
 
     it('Should create a new DOGE address without network field', async () => {
-      const data = await fluidcoins.createNewAddress({ code: 'DOGE' })
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
+      try {
+        const data = await fluidcoins.createNewAddress({ code: 'DOGE' })
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
 
     it('Should List all crypto deposits', async () => {
-      const data = await fluidcoins.getCryptoDeposits()
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
-      expect(data.transactions).to.be.an('array')
+      try {
+        const data = await fluidcoins.getCryptoDeposits()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
 
     it('Should Fetch a list transactions for a given address', async () => {
-      const data = await fluidcoins.getAddressTransactions(address.reference)
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
-      expect(data.transactions).to.be.an('array')
+      try {
+        const data = await fluidcoins.getAddressTransactions(address.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
 
     it('Should fetches an address by its id', async () => {
-      const data = await fluidcoins.getSingleAddress(address.reference)
-      expect(data).to.be.an('object')
-      expect(data.status).to.be.equal(true)
-      expect(data.address).to.be.an('object')
-      expect(data.address.reference).to.be.equal(address.reference)
+      try {
+        const data = await fluidcoins.getSingleAddress(address.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.address).to.be.an('object')
+        expect(data.address.reference).to.be.equal(address.reference)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
     })
   })
 })
