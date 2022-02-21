@@ -3,8 +3,35 @@ require('dotenv').config()
 const Fluidcoins = require('../../index')
 
 describe('Fluidcoins', () => {
+  let transactions
   let address
   const fluidcoins = new Fluidcoins(process.env.FLUIDCOINS_SECRET_KEY)
+
+  describe('#Transctions', () => {
+    it('Should Fetch a List of transactions', async () => {
+      try {
+        const data = await fluidcoins.getAllTransactions(1, 10, 'failed')
+        transactions = data.transactions
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a single transaction', async () => {
+      try {
+        const data = await fluidcoins.getSingleTransaction(transactions[0].reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transaction).to.be.an('object')
+        expect(data.transaction.reference).to.be.equal(transactions[0].reference)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
 
   describe('#Address', () => {
     it('Should Fetch addresses', async () => {
@@ -80,13 +107,84 @@ describe('Fluidcoins', () => {
       }
     })
 
-    it('Should fetches an address by its id', async () => {
+    it('Should Fetch a single transaction that occurred on a given address', async () => {
+      try {
+        const data = await fluidcoins.getAddressSingleTransaction(address.reference, transactions[0].reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transaction).to.be.an('object')
+        expect(data.transaction.reference).to.be.equal(transactions[0].reference)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should fetches an address by its reference', async () => {
       try {
         const data = await fluidcoins.getSingleAddress(address.reference)
         expect(data).to.be.an('object')
         expect(data.status).to.be.equal(true)
         expect(data.address).to.be.an('object')
         expect(data.address.reference).to.be.equal(address.reference)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
+
+  describe('#Balances', () => {
+    it('Should Fetch all balances of a merchant', async () => {
+      try {
+        const data = await fluidcoins.getBalance()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.balances).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
+
+  describe('#Currencies', () => {
+    it('Should Fetch a List of all currencies', async () => {
+      try {
+        const data = await fluidcoins.getCurrencies()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.currencies).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a List currencies that have a test-net network', async () => {
+      try {
+        const data = await fluidcoins.getCurrencies(true)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.currencies).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch fiat exchange rates', async () => {
+      try {
+        const data = await fluidcoins.getFiatRate()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.rates).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch fiat exchange rates with conversion', async () => {
+      try {
+        const data = await fluidcoins.getFiatRate('USDT', 'NGN')
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.rates).to.be.an('array')
       } catch (e) {
         expect(e.status).to.be.equal(false)
       }
