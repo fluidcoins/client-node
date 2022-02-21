@@ -1,17 +1,31 @@
 const { expect } = require('chai')
 require('dotenv').config()
 const Fluidcoins = require('../../index')
+const { userdata, updateUserData, paymentData } = require('../fixtures')
 
 describe('Fluidcoins', () => {
   let transactions
   let address
+  let customer
+  let link
   const fluidcoins = new Fluidcoins(process.env.FLUIDCOINS_SECRET_KEY)
 
   describe('#Transctions', () => {
     it('Should Fetch a List of transactions', async () => {
       try {
-        const data = await fluidcoins.getAllTransactions(1, 10, 'failed')
+        const data = await fluidcoins.getAllTransactions()
         transactions = data.transactions
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a List of failed transactions', async () => {
+      try {
+        const data = await fluidcoins.getAllTransactions('failed')
         expect(data).to.be.an('object')
         expect(data.status).to.be.equal(true)
         expect(data.transactions).to.be.an('array')
@@ -185,6 +199,172 @@ describe('Fluidcoins', () => {
         expect(data).to.be.an('object')
         expect(data.status).to.be.equal(true)
         expect(data.rates).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
+
+  describe('#Customer', () => {
+    it('Should Create a new customer', async () => {
+      try {
+        const data = await fluidcoins.createNewCustomer(userdata)
+        customer = data.customer
+        expect(data).to.be.an('object')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should edit a single customer', async () => {
+      try {
+        const data = await fluidcoins.editCustomer(customer.reference, updateUserData)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.customer).to.be.an('object')
+        expect(data.customer.reference).to.be.equal(customer.reference)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a list of customers', async () => {
+      try {
+        const data = await fluidcoins.getCustomers()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.customers).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a list of blacklisted customers', async () => {
+      try {
+        const data = await fluidcoins.getCustomers(true)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.customers).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Blacklist a customer', async () => {
+      try {
+        const data = await fluidcoins.blackListCustomer(customer.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.customer).to.be.an('object')
+        expect(data.customer.is_blacklisted).to.be.equal(true)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Whitelists a customer', async () => {
+      try {
+        const data = await fluidcoins.whiteListCustomer(customer.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.customer).to.be.an('object')
+        expect(data.customer.is_blacklisted).to.be.equal(false)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a List of transactions belong to a specific customer', async () => {
+      try {
+        const data = await fluidcoins.getCustomerTransactions(customer.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch a List of transactions with status type belong to a specific customer', async () => {
+      try {
+        const data = await fluidcoins.getCustomerTransactions(customer.reference, 'success')
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
+
+  describe('#Payment', () => {
+    it('Should create a new payement link', async () => {
+      try {
+        const data = await fluidcoins.createNewPaymentLink(paymentData)
+        link = data.link
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.link).to.be.an('object')
+        expect(data.link.title).to.be.equal(paymentData.title)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should fetch a payement link by reference', async () => {
+      try {
+        const data = await fluidcoins.getSinglePaymentLink(link.identifier)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.link).to.be.an('object')
+        expect(data.link.identifier).to.be.equal(link.identifier)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Disable a payment link for collection by reference', async () => {
+      try {
+        const data = await fluidcoins.disablePaymentLink(link.identifier)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.link).to.be.an('object')
+        expect(data.link.is_enabled).to.be.equal(false)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch all disabled payement links', async () => {
+      try {
+        const data = await fluidcoins.getPaymentLinks('disabled')
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.links).to.be.an('array')
+        expect(data.links[0].is_enabled).to.be.equal(false)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should enable a payment link for collection by reference', async () => {
+      try {
+        const data = await fluidcoins.enablePaymentLink(link.identifier)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.link).to.be.an('object')
+        expect(data.link.is_enabled).to.be.equal(true)
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch all payement links', async () => {
+      try {
+        const data = await fluidcoins.getPaymentLinks()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.links).to.be.an('array')
       } catch (e) {
         expect(e.status).to.be.equal(false)
       }
