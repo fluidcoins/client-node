@@ -36,6 +36,12 @@ describe('Fluidcoins', () => {
       expect(data.status).to.be.equal(true)
     })
 
+    it('Should create a new DOGE address without network field', async () => {
+      const data = await fluidcoins.createNewAddress({ code: 'DOGE' })
+      expect(data).to.be.an('object')
+      expect(data.status).to.be.equal(true)
+    })
+
     it('Should List all crypto deposits', async () => {
       const data = await fluidcoins.getCryptoDeposits()
       expect(data).to.be.an('object')
