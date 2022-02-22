@@ -8,6 +8,9 @@ describe('Fluidcoins', () => {
   let address
   let customer
   let link
+  let account
+  let payout
+
   const fluidcoins = new Fluidcoins(process.env.FLUIDCOINS_SECRET_KEY)
 
   describe('#Transctions', () => {
@@ -365,6 +368,153 @@ describe('Fluidcoins', () => {
         expect(data).to.be.an('object')
         expect(data.status).to.be.equal(true)
         expect(data.links).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch all transactions for payement link', async () => {
+      try {
+        const data = await fluidcoins.getPaymentLinkTransactions(link.identifier)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.transactions).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
+
+  describe('#payouts', () => {
+    it('Should fetch a list of all banks', async () => {
+      try {
+        const data = await fluidcoins.getBanks()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.banks).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    // it('Should resolve a bank account', async () => {
+    //   const data = await fluidcoins.resolveBankAccount('058', '0115544526')
+
+    // })
+
+    it('Should Creates a new payout account for ETH', async () => {
+      const payload = {
+        bank: {
+          account_number: '0115544526',
+          bank_code: '058'
+        },
+        crypto: {
+          address: address.address,
+          label: 'Test label',
+          network: address.metadata.network
+        },
+        currency: 'ETH'
+      }
+      try {
+        const data = await fluidcoins.createNewPayoutAccount(payload)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.payout).to.be.an('object')
+        expect(data.payout.crypto.coin).to.be.equal('ETH')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Creates a new payout account for NGN', async () => {
+      const payload = {
+        bank: {
+          account_number: '0115544526',
+          bank_code: '058'
+        },
+        crypto: {
+          address: address.address,
+          label: 'Test label',
+          network: address.metadata.network
+        },
+        currency: 'NGN'
+      }
+      try {
+        const data = await fluidcoins.createNewPayoutAccount(payload)
+        account = data.payout
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.payout).to.be.an('object')
+        expect(data.payout.bank.currency).to.be.equal('NGN')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch all payout accounts', async () => {
+      try {
+        const data = await fluidcoins.getPayoutAccounts()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.accounts).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Request a new payouts', async () => {
+      try {
+        const data = await fluidcoins.requestNewPayout(1000, account.reference)
+        payout = data.payout
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.payout).to.be.an('object')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch details of a payout ', async () => {
+      try {
+        const data = await fluidcoins.getPayoutDetails(payout.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.payout).to.be.an('object')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should cancel a new payouts', async () => {
+      try {
+        const data = await fluidcoins.cancelPayout(payout.reference)
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.payout).to.be.an('object')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+
+    it('Should Fetch all payout ', async () => {
+      try {
+        const data = await fluidcoins.getPayouts()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.payouts).to.be.an('array')
+      } catch (e) {
+        expect(e.status).to.be.equal(false)
+      }
+    })
+  })
+
+  describe('#Swaps', () => {
+    it('Should get swap history', async () => {
+      try {
+        const data = await fluidcoins.getSwapHistory()
+        expect(data).to.be.an('object')
+        expect(data.status).to.be.equal(true)
+        expect(data.swaps).to.be.an('array')
       } catch (e) {
         expect(e.status).to.be.equal(false)
       }
