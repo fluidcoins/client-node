@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "FluidCoins NodeJS SDK",
   "main": "index.js",
-  "types": "index.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "test": "mocha test/**/*.test.js --timeout 20000 --exit"
   },
