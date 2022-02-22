@@ -189,7 +189,7 @@ declare class  FluidCoins {
     * @param reference Customer unique identifier. E.g CUS_xyz
     * @param status The status of the transaction
     */
-   getCustomerTransactions(reference: string, status: Status): Promise<any | undefined>
+   getCustomerTransactions(reference: string, status?: Status): Promise<any | undefined>
 
    /**
     * Fetches a List payment of links
