@@ -22,17 +22,17 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.25.0",
-    "dotenv": "^16.0.0",
-    "faker": "^5.5.3"
+    "axios": "^0.25.0"
   },
   "devDependencies": {
     "chai": "^4.3.6",
+    "dotenv": "^16.0.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
+    "faker": "^5.5.3",
     "mocha": "^9.2.1"
   }
 }
