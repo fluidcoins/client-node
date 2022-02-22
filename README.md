@@ -1,8 +1,7 @@
 
-# Project Title
+# FluidCoins NodeJS SDK
 
-A brief description of what this project does and who it's for
-
+The Official Node.js library for the Fluidcoins API.
 
 ## Installation
 
@@ -19,7 +18,11 @@ const Fluidcoins = require('fluidcoins-node')
 
 fluidcoins = new Fluidcoins(secretKey)
 
-const addresses = fluidcoins.getSingleAddres('33213f4d-dd64-4235-93a9-abe49c46acd5')
+const addresses = fluidcoins.createNewAddress({ code: 'USDT', network: 'POLYGON' })
 
 ```
+
+## Documentation
+
+[Documentation](https://developers.fluidcoins.com)
 
