@@ -23,7 +23,6 @@ jobs:
     - run: git config --global user.name "Github CD bot"
     - run: git config --global user.email "developers@fluidcoins.com"
     - run: npm version ${{ github.event.release.tag_name }}
-    - run: npm run build:prod
     - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
