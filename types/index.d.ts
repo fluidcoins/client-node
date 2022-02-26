@@ -21,7 +21,7 @@ export interface Crypto {
 
 export interface Phone {
   code?: string;
-  number?: string;
+  phone?: string;
 }
 
 export interface CustomerData {
@@ -44,8 +44,8 @@ export interface AddressData {
 }
 
 export interface CreateCustomerData {
-  email?: string;
-  full_name?: string;
+  email: string;
+  full_name: string;
   phone?: Required<Phone>;
 }
 
