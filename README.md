@@ -5,16 +5,16 @@ The Official Node.js library for the Fluidcoins API.
 
 ## Installation
 
-Install fluidcoins-node with npm
+Install node-client with npm
 
 ```bash
-  npm install fluidcoins-node
+  npm i @fluidcoins/sdk
 ```
     
 ## Usage/Examples
 
 ```javascript
-const Fluidcoins = require('fluidcoins-node')
+const Fluidcoins = require('@fluidcoins/sdk')
 
 fluidcoins = new Fluidcoins(secretKey)
 
