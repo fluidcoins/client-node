@@ -137,7 +137,12 @@ declare class FluidCoins {
   /**
    * Fetches all balances of a merchant
    */
-  getBalance(): Promise<any | undefined>;
+  getBalances(): Promise<any | undefined>;
+
+  /**
+   * Fetches a single balance
+   */
+  getBalance(code: string): Promise<any | undefined>;
 
   /**
    * Fetches a List currencies
@@ -379,4 +384,3 @@ declare class FluidCoins {
 }
 
 export default FluidCoins;
-

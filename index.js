@@ -1,2 +1,1 @@
-
-module.exports = require('./lib/Fluidcoins')
+module.exports = require("./lib/Fluidcoins");
